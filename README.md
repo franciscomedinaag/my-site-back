@@ -1,2 +1,2 @@
 # my-site-back
-Backend of my personal website
+This is the Express backend of my personal website :)
