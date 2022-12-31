@@ -1,10 +1,11 @@
 const express = require("express");
-require('dotenv').config()
-
 const cors = require("cors");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/AuthRoutes");
 const app = express();
+const cookieParser = require("cookie-parser");
 
+require('dotenv').config()
 const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, ()=>{
@@ -31,4 +32,15 @@ app.use(
     })
 )
 
+
+
+app.use(cookieParser());
 app.use(express.json());
+
+app.use("/auth", authRoutes)
+
+app.all('*', (req, res) => {
+    console.log(`403: Someone attempted at ${req.path}`);
+    res.status(403);
+    res.end();
+})
