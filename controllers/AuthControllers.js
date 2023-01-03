@@ -12,6 +12,12 @@ const createToken = (id) => {
 const handleErrors = (err) => {
     let errors = {email:"", password:""};
 
+    if (err.message === "Incorrect Email")
+        errors.email = "The email is not registered"
+
+    if (err.message === "Incorrect Password")
+        errors.email = "The password is incorrect"
+
     if (err.code === 11000) {
         errors.email = "Email is already registered";
         return errors;
@@ -44,4 +50,21 @@ module.exports.register = async (req, res, next) => {
     }
 };
 
-module.exports.login = async (req, res, next) => {};
+module.exports.login = async (req, res, next) => {
+    try{
+        const {email, password} = req.body;
+        const user = await UserModel.login(email, password);
+        const token = createToken(user._id);
+
+        res.cookie("jwt", token, {
+            withCredentials: true,
+            httpOnly: false,
+            maxAge: maxAge * 1000
+        });
+        res.status(200).json({user:user._id, created:true})
+    } catch (err) {
+        console.log(err);
+        const errors = handleErrors(err);
+        res.json({errors, created : false});
+    }
+};
