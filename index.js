@@ -26,13 +26,11 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
 
 app.use(
     cors({
-        origin: ["http://localhost:3000"],
+        origin: [process.env.ALLOWED_ORIGIN_ONE],
         methods: ["GET", "POST"],
         credentials: true
     })
 )
-
-
 
 app.use(cookieParser());
 app.use(express.json());
