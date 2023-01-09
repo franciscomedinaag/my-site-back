@@ -68,3 +68,27 @@ module.exports.login = async (req, res, next) => {
         res.json({errors, created : false});
     }
 };
+
+module.exports.checkUser = (req, res, next) => {
+    const token = req.cookies.jwt;
+
+    if (token) {
+        jwt.verify(token, process.env.JWT_KEY, async (err, decodedToken) => {
+            if (err) {
+                res.json({status: false});
+            } else {
+                const user = await UserModel.findById(decodedToken.id);
+                if(user)
+                    res.json({status:true, user: user.email});
+                else
+                    res.json({status:false});
+            }
+        })
+    } else {
+        res.json({status:false});
+    }
+};
+
+module.exports.secretInfo = async (req, res, next) => {
+    res.status(200).json({info:"the secret is luv <3"})
+};

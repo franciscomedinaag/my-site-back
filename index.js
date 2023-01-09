@@ -36,9 +36,3 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/auth", authRoutes)
-
-app.all('*', (req, res) => {
-    console.log(`403: Someone attempted at ${req.path}`);
-    res.status(403);
-    res.end();
-})
