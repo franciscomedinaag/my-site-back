@@ -69,7 +69,7 @@ module.exports.login = async (req, res, next) => {
     }
 };
 
-module.exports.checkUser = (req, res, next) => {
+module.exports.checkIfUserIsAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (token) {
